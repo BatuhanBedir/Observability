@@ -10,5 +10,8 @@ internal class ServiceHelper
 
         Console.WriteLine($"google response length: {await serviceOne.MakeRequestToGoogle()}");
         Console.WriteLine("Work1 completed");
+
+        var serviceTwo = new ServiceTwo();
+        var fileLength = await serviceTwo.WriteToFile("Hello world");
     }
 }

@@ -29,6 +29,9 @@ internal class ServiceOne
             eventTags.Add("google body length", responseContent.Length);
             activity?.AddEvent(new("request to google completed", tags: eventTags));
 
+            //var serviceTwo = new ServiceTwo();
+            //var fileLength = await serviceTwo.WriteToFile("Hello world");
+
             return responseContent.Length;
         }
         catch (Exception ex)

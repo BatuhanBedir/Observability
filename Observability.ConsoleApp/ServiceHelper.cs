@@ -8,7 +8,7 @@ internal class ServiceHelper
 
         var serviceOne = new ServiceOne();
 
-        Console.WriteLine($"google response lenght: {await serviceOne.MakeRequestToGoogle()}");
+        Console.WriteLine($"google response length: {await serviceOne.MakeRequestToGoogle()}");
         Console.WriteLine("Work1 completed");
     }
 }

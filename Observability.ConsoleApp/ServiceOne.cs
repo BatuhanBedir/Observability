@@ -15,13 +15,18 @@ internal class ServiceOne
 
             activity?.AddEvent(new("request to google started", tags: eventTags));
 
+            activity?.AddTag("request.schema", "https");
+            activity?.AddTag("request.method", "get");
+
             var result = await httpClient.GetAsync("https://www.google.com");
             //var result = await httpClient.GetAsync("httpss://www.google.com");
 
             var responseContent = await result.Content.ReadAsStringAsync();
 
-            eventTags.Add("google body length", responseContent.Length);
+            activity?.AddTag("response.length", responseContent.Length);
 
+
+            eventTags.Add("google body length", responseContent.Length);
             activity?.AddEvent(new("request to google completed", tags: eventTags));
 
             return responseContent.Length;

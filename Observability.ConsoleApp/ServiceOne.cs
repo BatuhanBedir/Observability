@@ -5,7 +5,7 @@ internal class ServiceOne
     static HttpClient httpClient = new HttpClient();
     internal async Task<int> MakeRequestToGoogle()
     {
-        using var activity = ActivitySourceProvider.Source.StartActivity();
+        using var activity = ActivitySourceProvider.Source.StartActivity(kind: System.Diagnostics.ActivityKind.Producer, name: "CustomMakeRequestToGoogle");
 
         var result = await httpClient.GetAsync("https://www.google.com");
 

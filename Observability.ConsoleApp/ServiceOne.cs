@@ -27,10 +27,12 @@ internal class ServiceOne
 
 
             eventTags.Add("google body length", responseContent.Length);
+
+            //jaeger'de logsların içinde
             activity?.AddEvent(new("request to google completed", tags: eventTags));
 
-            //var serviceTwo = new ServiceTwo();
-            //var fileLength = await serviceTwo.WriteToFile("Hello world");
+            var serviceTwo = new ServiceTwo();
+            var fileLength = await serviceTwo.WriteToFile("Hello world");
 
             return responseContent.Length;
         }

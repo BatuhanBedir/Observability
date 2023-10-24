@@ -20,6 +20,10 @@ Console.WriteLine("Hello, World!");
     })
     .AddConsoleExporter()
     .AddOtlpExporter()
+    .AddZipkinExporter(zipkinOptions =>
+    {
+        zipkinOptions.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
+    })
     .Build();
 
 var serviceHelper = new ServiceHelper();

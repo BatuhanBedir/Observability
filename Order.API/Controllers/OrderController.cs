@@ -17,13 +17,11 @@ public class OrderController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(OrderCreateRequestDto request)
     {
-        await _orderService.CreateAsync(request);
-
+        return Ok(await _orderService.CreateAsync(request));
         #region Exception exp.
         //var a = 10;
         //var b = 0;
         //var c = a / b; 
         #endregion
-        return Ok(new OrderCreateResponseDto() { Id = new Random().Next(1, 500) });
     }
 }

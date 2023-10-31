@@ -32,6 +32,19 @@ public static class OpenTelemetryExtensions
                     return false;
                 };
                 opt.RecordException = true; //error details
+                //opt.EnrichWithException = (activity, exception) =>
+                //{
+                //    //activity.SetTag("key1", exception.InnerException);
+                //};
+            });
+            options.AddEntityFrameworkCoreInstrumentation(opt =>
+            {
+                opt.SetDbStatementForText = true;
+                opt.SetDbStatementForStoredProcedure = true;
+                //opt.EnrichWithIDbCommand = (activity, dbCommand) =>
+                //{
+                //    //efcore ile üretilen sql cümleciğini activity yani span olarak her kaydettiğinde burası tetikleniyor
+                //};
             });
             options.AddConsoleExporter();
             options.AddOtlpExporter(); //jaeger

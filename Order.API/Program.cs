@@ -1,8 +1,15 @@
 using Common.Shared;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Shared;
+using Order.API.Models;
 using Order.API.OrderServices;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+});
 
 builder.Services.AddScoped<OrderService>();
 

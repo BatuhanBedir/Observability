@@ -1,4 +1,4 @@
-﻿namespace Order.API.OpenTelemetry;
+﻿namespace OpenTelemetry.Shared;
 
 public class OpenTelemetryConstants
 {

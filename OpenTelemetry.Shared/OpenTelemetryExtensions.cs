@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System.Diagnostics;
 
 namespace OpenTelemetry.Shared;
 
@@ -37,6 +38,7 @@ public static class OpenTelemetryExtensions
                 //    //activity.SetTag("key1", exception.InnerException);
                 //};
             });
+
             options.AddEntityFrameworkCoreInstrumentation(opt =>
             {
                 opt.SetDbStatementForText = true;
@@ -46,6 +48,28 @@ public static class OpenTelemetryExtensions
                 //    //efcore ile üretilen sql cümleciğini activity yani span olarak her kaydettiğinde burası tetikleniyor
                 //};
             });
+
+            //api ' den veya mvc ' den başka external api ' lara yapmış olduğumuz istekleri oto. şekilde trace ediyor
+            options.AddHttpClientInstrumentation(opt =>
+            {
+                opt.EnrichWithHttpRequestMessage = async (activity, request) =>
+                {
+                    var requestContent = "empty";
+
+                    if (request.Content is not null)
+                        requestContent = await request.Content.ReadAsStringAsync();
+
+                    activity.SetTag("http.request.body", requestContent);
+                };
+                opt.EnrichWithHttpResponseMessage = async (activity, response) =>
+                {
+                    if (response.Content is not null)
+                        activity.SetTag("http.response.body", await response.Content.ReadAsStringAsync());
+
+                };
+
+            });
+
             options.AddConsoleExporter();
             options.AddOtlpExporter(); //jaeger
         });

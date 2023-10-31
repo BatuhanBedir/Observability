@@ -17,7 +17,16 @@ public class OrderController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(OrderCreateRequestDto request)
     {
-        return Ok(await _orderService.CreateAsync(request));
+        var result = await _orderService.CreateAsync(request);
+
+        var httpClient = new HttpClient();
+        var response = await httpClient.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return new ObjectResult(result) { StatusCode = result.StatusCode };
+
+
         #region Exception exp.
         //var a = 10;
         //var b = 0;

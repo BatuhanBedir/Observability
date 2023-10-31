@@ -70,6 +70,10 @@ public static class OpenTelemetryExtensions
 
             });
 
+            options.AddRedisInstrumentation(opt =>
+            {
+                opt.SetVerboseDatabaseStatements = true; //db ile ilgili statements detaylı kaydet
+            });
             options.AddConsoleExporter();
             options.AddOtlpExporter(); //jaeger
         });

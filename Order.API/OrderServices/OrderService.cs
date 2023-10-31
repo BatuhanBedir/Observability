@@ -1,6 +1,7 @@
 ﻿using Common.Shared.DTOs;
 using OpenTelemetry.Shared;
 using Order.API.Models;
+using Order.API.RedisServices;
 using Order.API.StockServices;
 using System.Diagnostics;
 using System.Net;
@@ -11,15 +12,26 @@ public class OrderService
 {
     private readonly AppDbContext _context;
     private readonly StockService _stockService;
-
-    public OrderService(AppDbContext context, StockService stockService)
+    private readonly RedisService _redisService;
+    public OrderService(AppDbContext context, StockService stockService, RedisService redisService)
     {
         _context = context;
         _stockService = stockService;
+        _redisService = redisService;
     }
 
     public async Task<ResponseDto<OrderCreateResponseDto>> CreateAsync(OrderCreateRequestDto request)
     {
+        using (var redisActivity = ActivitySourceProvider.Source.StartActivity("RedisStringSetGet"))
+        {
+            await _redisService.GetDb(0).StringSetAsync("userId", request.UserId);
+            redisActivity.SetTag("userId", request.UserId);
+            var redisUserId = await _redisService.GetDb(0).StringGetAsync("userId");
+        }
+
+        //await _redisService.GetDb(0).StringSetAsync("userId", request.UserId);
+
+
         Activity.Current?.SetTag("aspnetcore(instrumentation) tag1", "aspnetcore(instrumentation) value"); //current activity. 
 
         using var activity = ActivitySourceProvider.Source.StartActivity();//child activity

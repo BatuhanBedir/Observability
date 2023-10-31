@@ -8,7 +8,6 @@ namespace Order.API.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly OrderService _orderService;
-
     public OrderController(OrderService orderService)
     {
         _orderService = orderService;
@@ -19,10 +18,12 @@ public class OrderController : ControllerBase
     {
         var result = await _orderService.CreateAsync(request);
 
-        var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
+        #region third-party api request exp.
+        //var httpClient = new HttpClient();
+        //var response = await httpClient.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
 
-        var content = await response.Content.ReadAsStringAsync();
+        //var content = await response.Content.ReadAsStringAsync(); 
+        #endregion
 
         return new ObjectResult(result) { StatusCode = result.StatusCode };
 

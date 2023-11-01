@@ -38,6 +38,8 @@ public class OrderService
 
         activity?.AddEvent(new("order process has started"));
 
+        activity.SetBaggage("userId", request.UserId.ToString());
+
         var newOrder = new Order()
         {
             Created = DateTime.Now,

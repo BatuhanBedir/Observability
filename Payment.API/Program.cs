@@ -1,12 +1,8 @@
 using Common.Shared;
 using OpenTelemetry.Shared;
-using Stock.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<StockService>();
-builder.Services.AddScoped<PaymentService>();
-builder.Services.AddOpenTelemetryExt(builder.Configuration);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -14,10 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient<PaymentService>(options =>
-{
-    options.BaseAddress = new Uri((builder.Configuration.GetSection("ApiServices")["PaymentApi"])!);
-});
+builder.Services.AddOpenTelemetryExt(builder.Configuration);
 
 var app = builder.Build();
 

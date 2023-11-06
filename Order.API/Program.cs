@@ -1,4 +1,5 @@
 using Common.Shared;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Shared;
 using Order.API.Models;
@@ -38,6 +39,18 @@ builder.Services.AddOpenTelemetryExt(builder.Configuration);
 builder.Services.AddHttpClient<StockService>(options =>
 {
     options.BaseAddress = new Uri((builder.Configuration.GetSection("ApiServices")["StockApi"])!);
+});
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
+    });
 });
 
 var app = builder.Build();

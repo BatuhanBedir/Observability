@@ -1,4 +1,6 @@
 ﻿using Common.Shared.DTOs;
+using Common.Shared.Events;
+using MassTransit;
 using OpenTelemetry.Shared;
 using Order.API.Models;
 using Order.API.RedisServices;

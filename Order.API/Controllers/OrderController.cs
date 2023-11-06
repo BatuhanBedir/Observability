@@ -1,16 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common.Shared.Events;
+using MassTransit;
+using Microsoft.AspNetCore.Mvc;
 using Order.API.OrderServices;
+using System.Diagnostics;
 
 namespace Order.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 public class OrderController : ControllerBase
 {
     private readonly OrderService _orderService;
-    public OrderController(OrderService orderService)
+    private readonly IPublishEndpoint _publishEndpoint;
+    public OrderController(OrderService orderService, IPublishEndpoint publishEndpoint)
     {
         _orderService = orderService;
+        _publishEndpoint = publishEndpoint;
     }
 
     [HttpPost]
@@ -27,11 +32,16 @@ public class OrderController : ControllerBase
 
         return new ObjectResult(result) { StatusCode = result.StatusCode };
 
-
         #region Exception exp.
         //var a = 10;
         //var b = 0;
         //var c = a / b; 
         #endregion
+    }
+   [HttpGet]
+   public async Task<IActionResult> SendOrderCreatedEvent()
+    {
+        await _publishEndpoint.Publish(new OrderCreatedEvent() { OrderCode = Guid.NewGuid().ToString() });
+        return Ok();
     }
 }

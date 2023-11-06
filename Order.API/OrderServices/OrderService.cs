@@ -15,11 +15,13 @@ public class OrderService
     private readonly AppDbContext _context;
     private readonly StockService _stockService;
     private readonly RedisService _redisService;
-    public OrderService(AppDbContext context, StockService stockService, RedisService redisService)
+    private readonly ILogger<OrderService> _logger;
+    public OrderService(AppDbContext context, StockService stockService, RedisService redisService, ILogger<OrderService> logger)
     {
         _context = context;
         _stockService = stockService;
         _redisService = redisService;
+        _logger = logger;
     }
 
     public async Task<ResponseDto<OrderCreateResponseDto>> CreateAsync(OrderCreateRequestDto request)
@@ -58,6 +60,8 @@ public class OrderService
 
         _context.Orders.Add(newOrder);
         await _context.SaveChangesAsync();
+
+        _logger.LogInformation("order saved in database.{@userId}", request.UserId);
 
         StockCheckAndPaymentProcessRequestDto stockRequest = new();
         stockRequest.OrderCode = newOrder.OrderCode;

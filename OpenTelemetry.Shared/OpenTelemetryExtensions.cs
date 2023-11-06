@@ -23,6 +23,7 @@ public static class OpenTelemetryExtensions
             {
                 resource.AddService(serviceName: openTelemetryConstants.ServiceName, serviceVersion: openTelemetryConstants.ServiceVersion);
             });
+
             options.AddAspNetCoreInstrumentation(opt =>
             {
                 opt.Filter = (context) =>
@@ -33,7 +34,8 @@ public static class OpenTelemetryExtensions
                     }
                     return false;
                 };
-                opt.RecordException = true; //error details
+                //serilog üzerinden elasticsearch db'ye hatalar gönderildiği için yoruma alındı
+                //opt.RecordException = true; //error details
                 //opt.EnrichWithException = (activity, exception) =>
                 //{
                 //    //activity.SetTag("key1", exception.InnerException);
@@ -53,6 +55,12 @@ public static class OpenTelemetryExtensions
             //api ' den veya mvc ' den başka external api ' lara yapmış olduğumuz istekleri oto. şekilde trace ediyor
             options.AddHttpClientInstrumentation(opt =>
             {
+                opt.FilterHttpRequestMessage = (request) =>
+                {
+
+                    return !request.RequestUri.AbsoluteUri.Contains("9200", StringComparison.InvariantCulture);
+
+                };
                 opt.EnrichWithHttpRequestMessage = async (activity, request) =>
                 {
                     var requestContent = "empty";
@@ -75,7 +83,9 @@ public static class OpenTelemetryExtensions
             {
                 opt.SetVerboseDatabaseStatements = true; //db ile ilgili statements detaylı kaydet
             });
+
             options.AddConsoleExporter();
+
             options.AddOtlpExporter(); //jaeger
         });
     }

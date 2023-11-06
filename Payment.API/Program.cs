@@ -1,7 +1,10 @@
 using Common.Shared;
+using Logging.Shared;
 using OpenTelemetry.Shared;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog(Logging.Shared.Logging.ConfigureLogging);
 
 // Add services to the container.
 
@@ -20,8 +23,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<OpenTelemetryTraceIdMiddleware>();
 app.UseMiddleware<RequestAndResponseActivityMiddleware>();
+app.UseExceptionMiddleware();
+
 
 app.UseHttpsRedirection();
 

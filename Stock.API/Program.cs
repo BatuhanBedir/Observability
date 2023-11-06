@@ -1,10 +1,14 @@
 using Common.Shared;
+using Logging.Shared;
 using MassTransit;
 using OpenTelemetry.Shared;
+using Serilog;
 using Stock.API.Consumers;
 using Stock.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(Logging.Shared.Logging.ConfigureLogging);
 
 builder.Services.AddScoped<StockService>();
 builder.Services.AddScoped<PaymentService>();
@@ -47,8 +51,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<OpenTelemetryTraceIdMiddleware>();
 app.UseMiddleware<RequestAndResponseActivityMiddleware>();
+app.UseExceptionMiddleware();
+
 
 app.UseHttpsRedirection();
 

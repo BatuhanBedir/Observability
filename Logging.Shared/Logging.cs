@@ -1,12 +1,24 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry.Resources;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Formatting.Elasticsearch;
+using OpenTelemetry.Logs;
 
 namespace Logging.Shared;
 
 public static class Logging
 {
+    public static void AddOpenTelemetryLog(this WebApplicationBuilder builder)
+    {
+
+        
+    }
+
+
+
     public static Action<HostBuilderContext, LoggerConfiguration> ConfigureLogging => (builderContext, loggerConfiguration) =>
     {
         var environment = builderContext.HostingEnvironment;

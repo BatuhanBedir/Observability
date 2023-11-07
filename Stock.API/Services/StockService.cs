@@ -43,7 +43,7 @@ public class StockService
             return ResponseDto<StockCheckAndPaymentProcessResponseDto>.Fail(HttpStatusCode.BadRequest.GetHashCode(), "stok yetersiz");
         }
 
-        throw new DivideByZeroException("hata meydana geldi.");
+        //throw new DivideByZeroException("hata meydana geldi.");
 
         _logger.LogInformation("stock ayrıldı. orderCode:{@orderCode}", request.OrderCode);
         var (isSuccess, failMessage) = await _paymentService.CreatePaymentProcess(new PaymentCreateRequestDto()

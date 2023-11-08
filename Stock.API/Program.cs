@@ -20,6 +20,7 @@ builder.Logging.AddOpenTelemetry(cfg =>
 
 });
 //builder.AddOpenTelemetryLog();
+
 //builder.Host.UseSerilog(Logging.Shared.Logging.ConfigureLogging);
 
 builder.Services.AddScoped<StockService>();

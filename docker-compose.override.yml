@@ -6,13 +6,13 @@ services:
   #   - 4317:4317
   #   - 4318:4318
   #   - 16686:16686
-  redis: 
-   ports:
-    - 6379:6379  
-  rabbitmq: 
-   ports:
-    - 5672:5672 
-    - 15672:15672 
+  # redis: 
+  #  ports:
+  #   - 6379:6379  
+  # rabbitmq: 
+  #  ports:
+  #   - 5672:5672 
+  #   - 15672:15672 
   # elasticsearch:
   #  ports:
   #   - 9200:9200
@@ -41,5 +41,11 @@ services:
         - 55679:55679 # zpages extension
    volumes:
     - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
-volumes:
-  elastic_db:
+  metric.api: 
+   ports:
+        - 5010:8080
+  prometheus:
+   ports:
+        - 9090:9090
+# volumes:
+#   elastic_db:

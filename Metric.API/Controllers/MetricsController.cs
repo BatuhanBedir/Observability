@@ -22,4 +22,18 @@ public class MetricsController : ControllerBase
         Counter.OrderCancelledCounter += new Random().Next(1, 100);
         return Ok();
     }
+
+    [HttpGet]
+    public IActionResult UpDownCounterMetric()
+    {
+        OpenTelemetryMetric.CurrentStockCounter.Add(new Random().Next(-300, 300));
+
+        return Ok();
+    }
+    [HttpGet]
+    public IActionResult UpDownCounterObservableMetric()
+    {
+        Counter.CurrentStockCount += new Random().Next(-300, 300);
+        return Ok();
+    }
 }

@@ -3,5 +3,7 @@
     public class Counter
     {
         public static int OrderCancelledCounter { get; set; }
+
+        public static int CurrentStockCount { get; set; } = 1000;
     }
 }
